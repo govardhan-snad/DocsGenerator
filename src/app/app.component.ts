@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import Docxtemplater from 'docxtemplater';
-
+import * as JSZip from 'jszip';
+import * as PizZip from 'pizzip';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,8 +11,9 @@ import Docxtemplater from 'docxtemplater';
 })
 export class AppComponent implements OnInit {
   title = 'DocsGenerator';
-  file:any
-  reader = new FileReader()
+  file: any;
+  reader = new FileReader();
+  fileContent: string | ArrayBuffer | null = null;
 
   constructor() {}
 
@@ -26,8 +29,44 @@ export class AppComponent implements OnInit {
     return `${day}/${month}/${year}`;
   }
 
-  onChange(event: any) {
-    this.getDocs(event.target.files[0]);
+  onFileChange(event: any) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.fileContent = reader.result;
+    };
+    reader.readAsArrayBuffer(event.target.files[0]);
+  }
+
+  async generateDoc() {
+    if (!this.fileContent) {
+      return;
+    }
+
+
+      const doc = new Docxtemplater().loadZip(new PizZip(this.fileContent));
+      // do something with the doc...
+      const data = {
+        name: 'John Doe',
+        address: '123 Main Street',
+        salary: '$100,000',
+        issueddate: this.formatDate(new Date()),
+        lastdate: this.formatDate(new Date()),
+        worklocation: 'Hyderabad',
+        Issuername: 'Mary',
+        // add other dynamic fields here
+      };
+
+
+
+
+      doc.setData(data);
+      let result = doc.render();
+      console.log(result);
+
+      const output = doc.getZip().generate({ type: 'nodebuffer' });
+      // fs.writeFileSync('Desktop/output_document.docx', output);
+      console.log(output);
+
   }
 
   getDocs(content: File) {
@@ -40,25 +79,24 @@ export class AppComponent implements OnInit {
       this.file = {
         myFileVariable: fileContent,
       };
-      const doc = new Docxtemplater();
-      doc.loadZip(this.file);
-      const data = {
-        name: 'John Doe',
-        address: '123 Main Street',
-        salary: '$100,000',
-        issueddate: this.formatDate(new Date()),
-        lastdate: this.formatDate(new Date()),
-        worklocation: 'Hyderabad',
-        Issuername: 'Mary',
-        // add other dynamic fields here
-      };
+    };
+    const doc = new Docxtemplater();
 
-      doc.setData(data);
-      doc.render();
-      const output = doc.getZip().generate({ type: 'nodebuffer' });
-      // fs.writeFileSync('Desktop/output_document.docx', output);
-      console.log(output);
+    const data = {
+      name: 'John Doe',
+      address: '123 Main Street',
+      salary: '$100,000',
+      issueddate: this.formatDate(new Date()),
+      lastdate: this.formatDate(new Date()),
+      worklocation: 'Hyderabad',
+      Issuername: 'Mary',
+      // add other dynamic fields here
     };
 
+    doc.setData(data);
+    doc.render();
+    const output = doc.getZip().generate({ type: 'nodebuffer' });
+    // fs.writeFileSync('Desktop/output_document.docx', output);
+    console.log(output);
   }
 }
