@@ -10,8 +10,9 @@ import Docxtemplater from 'docxtemplater';
 export class AppComponent implements OnInit {
   title = 'DocsGenerator';
   file:any
+  reader = new FileReader()
 
-  constructor(private reader: FileReader) {}
+  constructor() {}
 
   ngOnInit(): void {
     // this.getDocs();
