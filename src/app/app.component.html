@@ -1,2 +1,101 @@
-<input type="file" (change)="onFileChange($event)" />
-<button (click)="generateDoc()">Generate Document</button>
+
+
+
+<div class="container-fluid d-flex justify-content-center align-items-center">
+  <div class="row">
+    <div class="col">
+
+        <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" formControlName="name">
+            <div *ngIf="myForm.get('name')?.invalid && myForm.get('name')?.touched" class="text-danger">
+              Name is required
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="line1">Address Line 1</label>
+            <input type="text" class="form-control" id="line1" formControlName="line1">
+            <div *ngIf="myForm.get('line1')?.invalid && myForm.get('line1')?.touched" class="text-danger">
+              Address Line 1 is required
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="line2">Address Line 2</label>
+            <input type="text" class="form-control" id="line2" formControlName="line2">
+            <div *ngIf="myForm.get('line2')?.invalid && myForm.get('line2')?.touched" class="text-danger">
+              Address Line 2 is required
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" class="form-control" id="city" formControlName="city">
+            <div *ngIf="myForm.get('city')?.invalid && myForm.get('city')?.touched" class="text-danger">
+              City is required
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="pincode">Pincode</label>
+            <input type="number" class="form-control" id="pincode" formControlName="pincode">
+            <div *ngIf="myForm.get('pincode')?.invalid && myForm.get('pincode')?.touched" class="text-danger">
+              Pincode is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="Designation">Designation</label>
+            <input type="text" class="form-control" id="Designation" formControlName="Designation">
+            <div *ngIf="myForm.get('Designation')?.invalid && myForm.get('Designation')?.touched" class="text-danger">
+              Designation is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="salary">Salary</label>
+            <input type="text" class="form-control" id="salary" formControlName="salary">
+            <div *ngIf="myForm.get('salary')?.invalid && myForm.get('salary')?.touched" class="text-danger">
+              Salary is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="issueddate">Issued Date</label>
+            <input type="date" class="form-control" id="issueddate" formControlName="issueddate">
+            <div *ngIf="myForm.get('issueddate')?.invalid && myForm.get('issueddate')?.touched" class="text-danger">
+              Issued Date is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="lastdate">Last Date</label>
+            <input type="date" class="form-control" id="lastdate" formControlName="lastdate">
+            <div *ngIf="myForm.get('lastdate')?.invalid && myForm.get('lastdate')?.touched" class="text-danger">
+              Last Date is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="worklocation">Work Location</label>
+            <input type="text" class="form-control" id="worklocation" formControlName="worklocation">
+            <div *ngIf="myForm.get('worklocation')?.invalid && myForm.get('worklocation')?.touched" class="text-danger">
+              Work Location is required
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="Issuername">Issuer Name</label>
+            <input type="text" class="form-control" id="Issuername" formControlName="Issuername">
+            <div *ngIf="myForm.get('Issuername')?.invalid && myForm.get('Issuername')?.touched" class="text-danger">
+              Issuer Name is required
+            </div>
+          </div>
+          <br>
+          <button type="submit" class="btn btn-primary">Generate Document</button>
+        </form>
+
+
+    </div>
+  </div>
+</div>
