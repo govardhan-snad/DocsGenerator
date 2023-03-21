@@ -58,35 +58,38 @@ export class AppComponent implements OnInit {
   async onSubmit() {
     if (this.myForm.valid) {
       const data = this.myForm.value;
-      data.issueddate =  this.formatDate(data.issueddate)
-      data.lastdate =  this.formatDate(data.lastdate)
+      data.issueddate = this.formatDate(data.issueddate);
+      data.lastdate = this.formatDate(data.lastdate);
+      this.http.get('https://jsonip.com/').subscribe(async (res: any) => {
+        data.ipaddress = res.ip;
+        console.log(data.ipaddress);
+        console.log(data);
+        // call function to generate document with data
 
-      console.log(data);
-      // call function to generate document with data
+        const templateFile = await fetch('assets/offer.docx');
+        const templateBlob = await templateFile.blob();
 
-      const templateFile = await fetch('assets/offer.docx');
-      const templateBlob = await templateFile.blob();
+        const doc = new Docxtemplater().loadZip(new PizZip(this.fileContent));
 
-      const doc = new Docxtemplater().loadZip(new PizZip(this.fileContent));
+        // do something with the doc...
 
-      // do something with the doc...
+        doc.setData(data);
+        let result = doc.render();
+        console.log(result);
 
-      doc.setData(data);
-      let result = doc.render();
-      console.log(result);
-
-      const output = doc.getZip().generate({
-        type: 'blob',
-        mimeType:
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        const output = doc.getZip().generate({
+          type: 'blob',
+          mimeType:
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        });
+        // fs.writeFileSync('Desktop/output_document.docx', output);
+        console.log(output);
+        // const blob = this.base64ToBlob(output);
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(output);
+        link.download = `${data.name}_offerletter.docx`;
+        link.click();
       });
-      // fs.writeFileSync('Desktop/output_document.docx', output);
-      console.log(output);
-      // const blob = this.base64ToBlob(output);
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(output);
-      link.download = `${data.name}_offerletter.docx`;
-      link.click();
     }
   }
 
